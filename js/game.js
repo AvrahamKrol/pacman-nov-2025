@@ -2,6 +2,7 @@
 
 const WALL = '&#8251;';
 const FOOD = '&middot;';
+const CHERRY = '🍒';
 const SUPER = '🍯';
 const EMPTY = ' ';
 
@@ -10,13 +11,24 @@ const gGame = {
   isOn: false,
 };
 var gBoard;
+var gIsWin = false;
+var gEmptyCells = [];
 
 function init() {
-  console.log('hello');
-
   gBoard = buildBoard();
   createPacman(gBoard);
   createGhosts(gBoard);
+
+  setInterval(() => {
+    getEmptyCells(gBoard);
+    if (!gEmptyCells.length) return;
+
+    const randomCell = getRandomCell(gEmptyCells);
+    const i = randomCell.i;
+    const j = randomCell.j;
+    gBoard[i][j] = CHERRY;
+    renderCell({ i, j }, CHERRY);
+  }, 15000);
 
   renderBoard(gBoard, '.board-container');
   gGame.isOn = true;
@@ -63,7 +75,23 @@ function updateScore(diff) {
   elScore.innerText = gGame.score;
 }
 
+function winGame() {
+  if (gFoodCount === 0) {
+    gGame.isOn = false;
+    gIsWin = true;
+    toggleModal();
+  }
+}
+
+function restartGame() {
+  gGame.isOn = true;
+  toggleModal();
+  clearAll();
+  init();
+}
+
 function gameOver() {
   console.log('Game Over');
+  toggleModal();
   gGame.isOn = false;
 }

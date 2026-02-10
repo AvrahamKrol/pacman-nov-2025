@@ -3,6 +3,8 @@
 const PACMAN = '😁';
 const SUPERPACMAN = '👿';
 var gPacman;
+var gFoodCount = 0;
+var gTimeOutId = null;
 
 function createPacman(board) {
   // TODO: initialize gPacman...
@@ -29,24 +31,41 @@ function movePacman(ev) {
   // TODO: hitting a ghost? call gameOver
   if (nextCell === GHOST) {
     if (gPacman.isSuper) {
-      gBoard[currPos.i][currPos.j] = EMPTY;
+      gGhostsEatenCount++;
+      gGhosts = gGhosts.filter(
+        (ghost) => ghost.pos.i !== nextPos.i && ghost.pos.j !== nextPos.j,
+      );
     } else {
+      gGame.isOn = false;
       gameOver();
       return;
     }
   }
-
   if (nextCell === SUPER) {
+    if (gPacman.isSuper) return;
     gPacman.isSuper = true;
-    setTimeout(() => {
+    gGhostsEatenCount = 0;
+
+    gTimeOutId = setTimeout(() => {
+      clearInterval(gGhostsInterval);
+      gGhostsInterval = null;
       gPacman.isSuper = false;
       gBoard[gPacman.pos.i][gPacman.pos.j] = PACMAN;
       renderCell(gPacman.pos, PACMAN);
+      createGhosts(gBoard);
     }, 5000);
   }
 
   // TODO: hitting food? call updateScore
-  if (nextCell === FOOD) updateScore(1);
+  if (nextCell === FOOD) {
+    gFoodCount = 0;
+    getFoodCount(gBoard);
+    gFoodCount--;
+    updateScore(1);
+    winGame();
+  }
+
+  if (nextCell === CHERRY) updateScore(10);
 
   // TODO: moving from current pos:
   // TODO: update the model

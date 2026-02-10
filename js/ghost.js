@@ -1,14 +1,15 @@
 'use strict';
 
-const GHOST = '&#9781';
+// const GHOST = '&#9781';
+const GHOST = '👻';
 var gGhosts = [];
-var gGhostsEaten = [];
-
+var gGhostsEatenCount = 0;
 var gGhostsInterval;
 
 function createGhosts(board) {
   // TODO: Create 3 ghosts and an interval
-  for (var i = 0; i < 3; i++) {
+  const length = gGhostsEatenCount ? gGhostsEatenCount : 3;
+  for (var i = 0; i < length; i++) {
     createGhost(board);
   }
   gGhostsInterval = setInterval(moveGhosts, 1000);
@@ -49,6 +50,7 @@ function moveGhost(ghost) {
 
   // TODO: hitting a pacman? call gameOver
   if (nextCell === PACMAN) {
+    gGame.isOn = false;
     gameOver();
     return;
   }

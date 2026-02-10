@@ -25,6 +25,61 @@ function renderCell(pos, value) {
   elCell.innerHTML = value;
 }
 
+function clearAll() {
+  clearInterval(gGhostsInterval);
+  clearTimeout(gTimeOutId);
+  gGhostsInterval = null;
+  gTimeOutId = null;
+  gGhosts = [];
+  gGhostsEatenCount = 0;
+  gGame.score = 0;
+  gFoodCount = 0;
+  updateScore(0);
+}
+
+function toggleModal() {
+  var message = '';
+  const modal = document.querySelector('.modal');
+  const table = document.querySelector('table');
+  table.style.display = !gGame.isOn ? 'none' : 'table';
+  modal.style.display = !gGame.isOn ? 'flex' : 'none';
+  message = gIsWin
+    ? `VICTORY!!! Your total score is ${gGame.score}`
+    : 'GAME OVER';
+  modal.innerHTML = `
+    ${message}
+    <button onclick="restartGame()">PLAY AGAIN</button>
+  `;
+}
+
+function getFoodCount(board) {
+  for (var i = 1; i < board.length - 1; i++) {
+    for (var j = 1; j < board[0].length - 1; j++) {
+      if (board[i][j] === FOOD) gFoodCount++;
+    }
+  }
+}
+
+function getRandomCell(emptyCells) {
+  if (!emptyCells.length) return;
+
+  const length = emptyCells.length;
+  const randomIdx = getRandomIntInclusive(0, length - 1);
+  return emptyCells[randomIdx];
+}
+
+function getEmptyCells(board) {
+  gEmptyCells = [];
+  for (var i = 1; i < board.length - 1; i++) {
+    for (var j = 1; j < board[0].length - 1; j++) {
+      if (board[i][j] === ' ') {
+        const emptyCell = { i, j };
+        gEmptyCells.push(emptyCell);
+      }
+    }
+  }
+}
+
 function getGhostColor(ghost) {
   return !gPacman.isSuper ? ghost.color : 'darkblue';
 }
