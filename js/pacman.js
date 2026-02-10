@@ -1,6 +1,7 @@
 'use strict';
 
 const PACMAN = '😁';
+const SUPERPACMAN = '👿';
 var gPacman;
 
 function createPacman(board) {
@@ -27,8 +28,21 @@ function movePacman(ev) {
 
   // TODO: hitting a ghost? call gameOver
   if (nextCell === GHOST) {
-    gameOver();
-    return;
+    if (gPacman.isSuper) {
+      gBoard[currPos.i][currPos.j] = EMPTY;
+    } else {
+      gameOver();
+      return;
+    }
+  }
+
+  if (nextCell === SUPER) {
+    gPacman.isSuper = true;
+    setTimeout(() => {
+      gPacman.isSuper = false;
+      gBoard[gPacman.pos.i][gPacman.pos.j] = PACMAN;
+      renderCell(gPacman.pos, PACMAN);
+    }, 5000);
   }
 
   // TODO: hitting food? call updateScore
@@ -44,6 +58,13 @@ function movePacman(ev) {
   // TODO: Move the pacman to new pos:
   // TODO: update the model
   gPacman.pos = nextPos;
+
+  if (gPacman.isSuper) {
+    gBoard[gPacman.pos.i][gPacman.pos.j] = SUPERPACMAN;
+    renderCell(gPacman.pos, SUPERPACMAN);
+    return;
+  }
+
   gBoard[gPacman.pos.i][gPacman.pos.j] = PACMAN;
 
   // TODO: update the DOM

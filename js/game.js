@@ -41,6 +41,14 @@ function buildBoard() {
       ) {
         board[i][j] = WALL;
       }
+      if (
+        (i === 1 && j === 1) ||
+        (i === size - 2 && j === 1) ||
+        (j === size - 2 && i === 1) ||
+        (j === size - 2 && i === size - 2)
+      ) {
+        board[i][j] = SUPER;
+      }
     }
   }
   return board;
