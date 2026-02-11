@@ -8,6 +8,10 @@ var gGhostsInterval;
 
 function createGhosts(board) {
   // TODO: Create 3 ghosts and an interval
+  if (gGhostsInterval) {
+    clearInterval(gGhostsInterval);
+    gGhostsInterval = null;
+  }
   const length = gGhostsEatenCount ? gGhostsEatenCount : 3;
   for (var i = 0; i < length; i++) {
     createGhost(board);

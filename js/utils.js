@@ -58,6 +58,7 @@ function getFoodCount(board) {
       if (board[i][j] === FOOD) gFoodCount++;
     }
   }
+  console.log(gFoodCount);
 }
 
 function getRandomCell(emptyCells) {

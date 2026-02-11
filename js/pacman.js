@@ -47,19 +47,17 @@ function movePacman(ev) {
     gGhostsEatenCount = 0;
 
     gTimeOutId = setTimeout(() => {
-      clearInterval(gGhostsInterval);
-      gGhostsInterval = null;
       gPacman.isSuper = false;
       gBoard[gPacman.pos.i][gPacman.pos.j] = PACMAN;
       renderCell(gPacman.pos, PACMAN);
+
+      if (gGhosts.length === 3) return;
       createGhosts(gBoard);
     }, 5000);
   }
 
   // TODO: hitting food? call updateScore
   if (nextCell === FOOD) {
-    gFoodCount = 0;
-    getFoodCount(gBoard);
     gFoodCount--;
     updateScore(1);
     winGame();

@@ -18,7 +18,7 @@ function init() {
   gBoard = buildBoard();
   createPacman(gBoard);
   createGhosts(gBoard);
-
+  getFoodCount(gBoard);
   setInterval(() => {
     getEmptyCells(gBoard);
     if (!gEmptyCells.length) return;
